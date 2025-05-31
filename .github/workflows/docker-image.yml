@@ -1,0 +1,42 @@
+name: Build and Push to GHCR
+
+on:
+  workflow_dispatch:
+    inputs:
+      user:
+        description: 'COG_REPO (source repo for model)'
+        required: true
+      model_name:
+        description: 'COG_MODEL (model name)'
+        required: true
+      model_version:
+        description: 'COG_VERSION (model version tag)'
+        required: true
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build Docker image
+      run: |
+        docker build \
+          --tag ghcr.io/${{ github.actor }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }} \
+          --build-arg COG_REPO=${{ github.event.inputs.user }} \
+          --build-arg COG_MODEL=${{ github.event.inputs.model_name }} \
+          --build-arg COG_VERSION=${{ github.event.inputs.model_version }} \
+          .
+
+    - name: Push Docker image
+      run: |
+        docker push ghcr.io/${{ github.actor }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }}
