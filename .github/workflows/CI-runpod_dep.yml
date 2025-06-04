@@ -4,9 +4,6 @@ on:
   repository_dispatch:
     types: [python-package-release]
 
-  push:
-    branches: ["main"]
-
   workflow_dispatch:
 
 jobs:
