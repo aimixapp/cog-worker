@@ -3,7 +3,7 @@ name: CI | Test Worker
 on:
   push:
     branches:
-      - main
+      - main_not_run
 
   pull_request:
     branches:
