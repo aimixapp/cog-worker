@@ -50,10 +50,7 @@ jobs:
           sudo apt-get autoclean -y >/dev/null 2>&1
           echo "some packages purged"
     - name: Check disk space
-      run: |
-          sudo dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -nr | head
-          df . -h
-          sudo du /usr/ -hx -d 4 --threshold=1G | sort -hr | head
+      run: df . -h
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -67,7 +64,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker build \
-          --tag ghcr.io/${{ github.actor }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }} \
+          --tag ghcr.io/${{ github.repository_owner }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }} \
           --build-arg COG_REPO=${{ github.event.inputs.user }} \
           --build-arg COG_MODEL=${{ github.event.inputs.model_name }} \
           --build-arg COG_VERSION=${{ github.event.inputs.model_version }} \
@@ -75,4 +72,4 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker push ghcr.io/${{ github.actor }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }}
+        docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }}
