@@ -3,6 +3,7 @@ name: CD | Dev Docker Image
 on:
   push:
     branches-ignore:
+      - "main"
       - "refs/tags/*"
 
 jobs:
