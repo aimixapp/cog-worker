@@ -75,4 +75,4 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.inputs.model_name }}:${{ github.event.inputs.model_version }}
+        docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.inputs.package_name }}:${{ github.event.inputs.model_version }}
